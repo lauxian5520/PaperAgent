@@ -1,0 +1,2 @@
+claim_id,section,claim_text,evidence_file,evidence_key,status,notes
+C001,introduction,"REPLACE_ME",results/example.json,metrics.example,pending,

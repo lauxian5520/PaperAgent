@@ -1,0 +1,30 @@
+{
+  "experiment_id": "example_experiment",
+  "status": "completed",
+  "created_at": "2026-01-01T00:00:00Z",
+  "command": "python code/run_experiment.py --config code/configs/example.yaml",
+  "seed": 0,
+  "hardware": {
+    "device": "cpu",
+    "cpu": "unknown",
+    "gpu": null
+  },
+  "software": {
+    "python": "3.x",
+    "numpy": "2.x"
+  },
+  "conditions": [
+    {
+      "condition_id": "baseline_seed0",
+      "method": "baseline",
+      "dataset": "example_dataset",
+      "metrics": {
+        "accuracy": 0.0,
+        "runtime_seconds": 0.0
+      },
+      "status": "completed"
+    }
+  ],
+  "artifacts": [],
+  "notes": "This is a schema example, not a real result."
+}

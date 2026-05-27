@@ -1,0 +1,63 @@
+# Example project configuration for the Codex paper agent.
+# Copy this file to paper_config.yaml and adapt it to your project.
+
+project_name: "my-paper-project"
+
+paper:
+  title: "A Reproducible Study of Example Method for Example Task"
+  target_conference: "ICLR 2027"
+  deadline: "2026-09-28 23:59 AoE"
+  page_limit: 9
+  abstract_source: "docs/abstract.md"
+
+research:
+  topic_short_name: "example-topic"
+  topic_description: "A concrete and falsifiable research topic goes here."
+  primary_claim: "The proposed method improves the primary metric under controlled conditions."
+  domains:
+    - "machine learning"
+    - "optimization"
+  core_contributions:
+    - name: "Method"
+      description: "A concise technical method contribution."
+    - name: "Analysis"
+      description: "A theoretical or empirical analysis contribution."
+    - name: "Evaluation"
+      description: "A reproducible empirical evaluation contribution."
+
+paths:
+  source_repo: "."
+  docs_repo: "docs"
+  examples_repo: "examples"
+  latex_template: "paper/venue_template"
+  paper_dir: "paper/mypaper"
+  results_dir: "results"
+  code_dir: "code"
+  data_dir: "data"
+
+input_documents:
+  paper_idea: "docs/paper_idea.md"
+  experiment_plan: "docs/experiment_plan.md"
+  literature_questions: "docs/literature_and_questions.md"
+
+constraints:
+  min_references: 30
+  reference_year_after: 2020
+  min_experiment_conditions: 10
+  max_research_loops: 2
+  max_repair_attempts_per_stage: 3
+  require_human_approval: true
+  allow_sota_claims_without_gate: false
+  allow_unverified_citations: false
+  allow_synthetic_results: false
+
+compute_budget:
+  max_total_runtime_hours: 6
+  max_single_run_minutes: 30
+  pilot_required: true
+  stop_at_budget_fraction: 0.8
+
+submission:
+  anonymous: true
+  include_reproducibility_statement: false
+  include_acknowledgements: false
