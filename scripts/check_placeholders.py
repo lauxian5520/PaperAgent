@@ -49,7 +49,7 @@ def iter_files(paths: list[Path], root: Path, extensions: set[str], excludes: se
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("paths", nargs="*", default=["docs", "paper", "code", "results", "paper_config.yaml", "AGENTS.md"])
+    parser.add_argument("paths", nargs="*", default=["docs", "paper", "code", "results", "paper_config.yaml"])
     parser.add_argument("--root", default=".")
     parser.add_argument("--exclude", action="append", default=[])
     args = parser.parse_args()

@@ -24,6 +24,16 @@ Before a full experiment:
 
 Do not run the full experiment if the estimated runtime exceeds `compute_budget` in `paper_config.yaml`.
 
+Before experiment design or pilot execution, record local hardware when relevant:
+
+```bash
+python scripts/detect_hardware.py --output results/hardware_report.json
+```
+
+When adapting an existing model, use `references/model_adapter_rules.md`.
+Generate adapters under `code/adapters/` and keep the original model code
+unchanged unless a real bug must be fixed.
+
 ## Resource guard
 
 Experiment code should implement a time guard:
@@ -97,6 +107,30 @@ Before writing Results:
 - Each claimed component must have an ablation.
 - Ablations should remove one component at a time.
 - If a component has no ablation, do not claim that it is effective.
+
+Use `configs/experiment_matrix.example.json` or
+`configs/experiment_matrix.example.yaml` as the starting shape for approved
+experiment matrices. A real experiment matrix should enumerate:
+
+- proposed methods;
+- required baselines;
+- ablations;
+- downstream tasks;
+- datasets;
+- seed list;
+- primary and secondary metrics;
+- budget and logging policy.
+
+The stdlib runner accepts the JSON matrix format:
+
+```bash
+python scripts/run_experiment_matrix.py --matrix configs/experiment_matrix.example.json --pilot-only --dry-run
+python scripts/run_experiment_matrix.py --matrix configs/approved_experiment_matrix.json --pilot-only
+python scripts/run_experiment_matrix.py --matrix configs/approved_experiment_matrix.json --approve-full
+```
+
+Full matrix execution requires `--approve-full`; use this only after the pilot
+and human gate have passed.
 
 ## Debugging discipline
 

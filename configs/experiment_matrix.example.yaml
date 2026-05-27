@@ -1,0 +1,45 @@
+# Example experiment matrix for proposed methods, baselines, ablations, and downstream tasks.
+# Copy this file and adapt it after docs/final_experiment_design.md is approved.
+
+experiment_id: example_matrix
+seed_list: [0, 1, 2]
+
+budget:
+  max_total_runtime_hours: 6
+  max_single_run_minutes: 30
+  stop_at_budget_fraction: 0.8
+
+datasets:
+  - id: example_dataset
+    path: data/example_dataset
+    train_split: train
+    validation_split: val
+    test_split: test
+    notes: Replace with the real dataset description.
+
+methods:
+  proposed:
+    - id: ours_full
+      config: code/configs/ours_full.yaml
+  baselines:
+    - id: baseline_required_1
+      config: code/configs/baseline_required_1.yaml
+      source: Replace with paper, repository, or local implementation path.
+  ablations:
+    - id: ours_without_component_a
+      config: code/configs/ours_without_component_a.yaml
+      removes: component_a
+  downstream_tasks:
+    - id: downstream_task_1
+      config: code/configs/downstream_task_1.yaml
+
+metrics:
+  primary: primary_metric_name
+  direction: maximize
+  secondary: []
+
+logging:
+  results_dir: results
+  save_command: true
+  save_hardware: true
+  save_software: true

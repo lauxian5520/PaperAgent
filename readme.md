@@ -197,7 +197,7 @@ Update PROGRESS.md.
 
 ```bash
 python scripts/validate_config.py
-python scripts/check_placeholders.py docs paper code results paper_config.yaml AGENTS.md
+python scripts/check_placeholders.py docs paper code results paper_config.yaml
 python scripts/check_results_schema.py
 python scripts/validate_bib.py
 python scripts/count_tex_words.py
@@ -250,6 +250,132 @@ readiness check
 ```
 
 这个模板的核心目标不是让 agent “替你做科研判断”，而是让 agent 在你监督下稳定完成重复、繁琐、可验证的工程化科研任务。
+
+## 可执行工具链补充
+
+为了让原始长版 AGENTS.md 中的流水线更接近可运行状态，本模板提供了一组脚本入口。它们不会替代 Codex 的研究判断，也不会自动保证论文成立，但可以把阶段计划、硬件记录、文献抓取、实验矩阵运行和证据门控变成可重复命令。
+
+### 阶段入口
+
+```bash
+python scripts/run_stage.py readiness --run-checks
+python scripts/run_stage.py experiment-design --create-plan-only
+python scripts/run_stage.py quality-gate --run-checks
+```
+
+`run_stage.py` 会创建阶段计划、列出预期产物，并在需要时运行轻量检查。它不会自动跳过人工门控。
+
+### 硬件检测
+
+```bash
+python scripts/detect_hardware.py --output results/hardware_report.json
+```
+
+该命令记录 Python、常见科学计算库、NVIDIA GPU、PyTorch CUDA/MPS 状态，适合在实验设计或 pilot 前保存环境证据。
+
+### 多源文献检索
+
+```bash
+python scripts/literature_collect_openalex.py --query "your topic" --from-year 2020 --max-results 50 --output results/literature_candidates_openalex.jsonl
+python scripts/literature_collect_semantic_scholar.py --query "your topic" --from-year 2020 --max-results 50 --output results/literature_candidates_semantic_scholar.jsonl
+python scripts/literature_collect_arxiv.py --query "your topic" --from-year 2020 --max-results 50 --output results/literature_candidates_arxiv.jsonl
+```
+
+这些脚本只负责抓取真实候选文献。去重、筛选、知识卡片和 BibTeX 仍需要 agent 和人工检查。
+
+### 实验矩阵运行
+
+先复制并修改：
+
+```text
+configs/experiment_matrix.example.json
+```
+
+pilot 运行：
+
+```bash
+python scripts/run_experiment_matrix.py --matrix configs/approved_experiment_matrix.json --pilot-only
+```
+
+完整实验必须显式批准：
+
+```bash
+python scripts/run_experiment_matrix.py --matrix configs/approved_experiment_matrix.json --approve-full
+```
+
+runner 会记录每个 condition 的命令、状态、运行时间和日志路径，并写入 `results/experiment_matrix_summary.json`。
+
+### 模型适配代码生成
+
+如果你已经有模型代码，可以先让 agent 生成标准 adapter，而不是直接改模型源码。
+
+第一步，扫描模型代码：
+
+```bash
+python scripts/inspect_model_code.py --code-dir code --output docs/model_code_inventory.json
+```
+
+第二步，复制并填写适配规格：
+
+```text
+templates/model_adapter_spec.example.json
+docs/model_adapter_spec.json
+```
+
+第三步，生成 adapter：
+
+```bash
+python scripts/generate_model_adapter.py --spec docs/model_adapter_spec.json
+```
+
+生成结果会放在：
+
+```text
+code/adapters/
+```
+
+adapter 会统一暴露 `build_model`、`prepare_batch`、`forward`、`compute_loss`、`compute_metrics`。其中 loss 和 metrics 必须使用真实任务逻辑实现，默认会主动报错，防止假指标混入实验结果。
+
+推荐给 Codex 的指令：
+
+```text
+Follow AGENTS.md strictly.
+
+Adapt the existing model code to the experiment pipeline.
+Read docs/experiment_plan.md and references/model_adapter_rules.md.
+Run scripts/inspect_model_code.py to inventory model classes and entrypoints.
+Create docs/model_adapter_spec.json from templates/model_adapter_spec.example.json.
+Generate an adapter under code/adapters/.
+Complete only the adapter layer needed for a smoke test.
+Do not run full experiments.
+Write docs/model_adapter_report.md.
+Update PROGRESS.md and stop.
+```
+
+### 证据门控
+
+```bash
+python scripts/evidence_gate.py
+```
+
+该命令会生成：
+
+```text
+docs/evidence_gate_report.md
+results/evidence_gate_report.json
+```
+
+它会保守检查论文中的数字、引用、BibTeX 标识符，以及疑似数据集/方法名是否能在结果、代码、配置或引用中找到证据。它不能替代人工审查，但能捕捉很多明显风险。
+
+### 远程服务器运行
+
+远程实验说明见：
+
+```text
+docs/remote_execution.md
+```
+
+推荐先让 agent 做远程环境检查，再跑 pilot，最后经过人工批准后才运行完整实验。
 
 ## 需要你自己填写或准备的内容
 

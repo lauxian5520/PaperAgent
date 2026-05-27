@@ -1,0 +1,27 @@
+{
+  "adapter_name": "example_model",
+  "framework": "pytorch",
+  "task": {
+    "type": "supervised_classification",
+    "description": "Example task description."
+  },
+  "model": {
+    "module": "code.models.example_model",
+    "class_or_factory": "ExampleModel",
+    "constructor_kwargs": {}
+  },
+  "data": {
+    "input_fields": [
+      "inputs"
+    ],
+    "target_field": "labels",
+    "batch_format": "mapping"
+  },
+  "metrics": {
+    "primary": "accuracy",
+    "direction": "maximize",
+    "secondary": [
+      "f1"
+    ]
+  }
+}

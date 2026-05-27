@@ -17,6 +17,17 @@ Allowed retrieval sources include:
 - publisher pages
 - project pages linked from papers
 
+Available helper scripts:
+
+```bash
+python scripts/literature_collect_openalex.py --query "your topic" --from-year 2020 --max-results 50 --output results/literature_candidates_openalex.jsonl
+python scripts/literature_collect_semantic_scholar.py --query "your topic" --from-year 2020 --max-results 50 --output results/literature_candidates_semantic_scholar.jsonl
+python scripts/literature_collect_arxiv.py --query "your topic" --from-year 2020 --max-results 50 --output results/literature_candidates_arxiv.jsonl
+```
+
+These scripts only retrieve raw candidates. Screening, deduplication, relevance
+judgment, and BibTeX generation still require review and verification.
+
 ## Required metadata
 
 Each paper should include as many of these fields as possible:

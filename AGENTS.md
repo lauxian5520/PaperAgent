@@ -15,10 +15,16 @@ Before doing any substantial task:
 5. Load only the necessary reference file from `references/`:
    - `references/pipeline.md` for stage order and loop rules.
    - `references/experiment_rules.md` for code, experiment, resource, and reproducibility rules.
+   - `references/model_adapter_rules.md` for adapting existing model code to the experiment pipeline.
    - `references/literature_rules.md` for search, retrieval, screening, BibTeX, and citation rules.
    - `references/writing_rules.md` for paper drafting and LaTeX conventions.
    - `references/evidence_gate.md` for claim-result consistency checks.
    - `references/prompt_templates.md` for recommended Codex task prompts.
+
+This repository is a paper-pipeline template. If `paper_config.yaml` still
+contains placeholders, do not run a real paper stage. It is still acceptable to
+edit template infrastructure, scripts, examples, and documentation when the user
+explicitly asks to improve this agent template itself.
 
 ## Hard constraints
 
@@ -70,7 +76,13 @@ Use these commands when relevant:
 
 ```bash
 python scripts/validate_config.py
+python scripts/run_stage.py readiness --run-checks
+python scripts/detect_hardware.py
+python scripts/inspect_model_code.py --code-dir code --output docs/model_code_inventory.json
+python scripts/generate_model_adapter.py --spec docs/model_adapter_spec.json
+python scripts/check_placeholders.py docs paper code results paper_config.yaml
 python scripts/check_results_schema.py
+python scripts/evidence_gate.py
 python scripts/validate_bib.py
 python scripts/count_tex_words.py
 python scripts/check_claims_against_results.py

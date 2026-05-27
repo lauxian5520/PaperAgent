@@ -2,8 +2,9 @@
 set -euo pipefail
 
 python scripts/validate_config.py
-python scripts/check_placeholders.py docs paper code results paper_config.yaml AGENTS.md
+python scripts/check_placeholders.py docs paper code results paper_config.yaml
 python scripts/check_results_schema.py
+python scripts/evidence_gate.py
 python scripts/validate_bib.py
 python scripts/count_tex_words.py
 python scripts/check_claims_against_results.py

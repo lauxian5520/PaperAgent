@@ -44,12 +44,23 @@ Mark as `CRITICAL_FABRICATION` and return to experiment or writing stage if:
 ## Useful commands
 
 ```bash
+python scripts/evidence_gate.py
 python scripts/check_claims_against_results.py
 python scripts/validate_bib.py
 python scripts/check_results_schema.py
 ```
 
 The numeric evidence checker is conservative: it can find suspicious unmatched numbers, but it cannot prove scientific correctness. Human review remains required.
+
+`scripts/evidence_gate.py` combines several conservative checks:
+
+- paper numbers that do not appear in result files;
+- citation keys missing from BibTeX;
+- BibTeX entries missing verifiable identifiers;
+- candidate dataset or method terms not found in results, code, configs, or BibTeX.
+
+It writes both `docs/evidence_gate_report.md` and
+`results/evidence_gate_report.json`.
 
 ## Evidence report format
 

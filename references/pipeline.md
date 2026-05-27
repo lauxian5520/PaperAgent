@@ -75,3 +75,29 @@ Never run open-ended loops. Respect `constraints.max_research_loops` and `constr
 | 22 | compiled paper under `paper/mypaper/` |
 | 23 | `docs/citation_verification.md` |
 | 24-25 | `docs/external_review_and_rebuttal.md` |
+
+## Stage command surface
+
+The pipeline is primarily executed by Codex reasoning plus repository files, but
+the following command provides a stable stage entrypoint for plans and checks:
+
+```bash
+python scripts/run_stage.py <stage> --create-plan-only
+python scripts/run_stage.py <stage> --run-checks
+```
+
+Supported stage keys:
+
+- `readiness`
+- `stage-a`
+- `literature`
+- `experiment-design`
+- `model-adapter`
+- `pilot`
+- `full-experiment`
+- `analysis`
+- `writing`
+- `quality-gate`
+
+`run_stage.py` does not replace human approval or Codex execution. It creates
+stage plans, lists expected outputs, and runs lightweight validation commands.
